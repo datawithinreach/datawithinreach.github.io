@@ -28,13 +28,13 @@
   <title>Data Within Reach Lab at Boston College</title>
   <link rel="icon" href="/assets/images/favicon.ico" type="image/png" sizes="16x16 32x32">
 
-  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
     integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
   <link rel="stylesheet" href="assets/css/index.css">
-  <link rel="stylesheet" href="assets/css/homepage.css">
 
   <!--dependencies-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
@@ -42,8 +42,8 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
 
+  <script src="assets/js/common.js" type="module"></script>
   <script src="assets/js/index.js" type="module"></script>
-  <script src="assets/js/homepage.js" type="module"></script>
 
 </head>
 
@@ -51,15 +51,31 @@
   <div class="canvas-container"></div>
 
   <header class="container">
-    <h1 class="title"> <img class="logo" height="48px"src="assets/images/bc/logo.png"/>Data Within Reach Lab</h1>
-    
+    <h1 class="title"> <img class="logo" height="48px" src="assets/images/bc/logo.png" />Data Within Reach Lab</h1>
+
     <div class="row">
+
       <section class="column">
 
-      </section>
-      <section class="column">
-        <p>
-          Nam Wook Kim is an <strong>Assistant Professor of Computer Science</strong> at <strong>Boston
+        <img class="teaser" src="assets/images/bc/campus5.jpg" alt="Teaser image showing the 245 Beacon Street building at Boston College."/>
+        <p class="lab-intro">
+          We are the Data Within Reach lab in the computer science department at Boston College. As our world is
+          becoming increasingly data-driven, the ability to understand and communicate data is becoming an essential
+          skill for everyone. Our research vision is to make data more accessible and bring it within reach of broader
+          audiences from diverse backgrounds. We aim to inform the world about the best data visualization practice and
+          investigate novel approaches to empower people to interact with data beyond traditional expert analytic
+          systems.
+
+        <div class="lab-social-media">
+          <a href="https://www.youtube.com/channel/UCfh7ksWnkOW8XwlB9zgGviA" target="_blank"><i class="fab fa-youtube"></i>
+            <span class="visuallyhidden"></span> Videos
+          </a>
+          <span class="dv">|</span>
+         
+          <a href="https://github.com/datawithinreach" target="_blank"><i class="fab fa-github" aria-hidden="true"></i>
+            <span class="visuallyhidden"></span> Github</a>
+        </div>
+        <!-- Nam Wook Kim is an <strong>Assistant Professor of Computer Science</strong> at <strong>Boston
             College</strong>.
           His research vision is to lower barriers for everyone to understand and communicate complex data. He tackles
           this challenge by studying <a href="https://en.wikipedia.org/wiki/Visualization_(graphics)"
@@ -71,36 +87,10 @@
 
           His work has been recognized with awards from <a href="https://sigchi.org/conferences/conference-history/chi/"
             target="_blank">ACM CHI</a>, <a href="https://sigchi.org/conferences/conference-history/uist/">ACM UIST</a>,
-          and <a href="https://www.informationisbeautifulawards.com/">Kantar Information is Beautiful Awards</a>.
+          and <a href="https://www.informationisbeautifulawards.com/">Kantar Information is Beautiful Awards</a>. -->
 
 
 
-
-          <!-- To go beyond traditional expert systems, my work strives to establish a framework for creating <strong>visual data systems for the public</strong> by exploring how to enable individuals to author compelling data stories about the data and understanding the cognitive aspects of visualization and storytelling. -->
-        </p>
-        <p>
-          He earned a Ph.D. in Computer Science from Harvard University. His Ph.D. studies were supported by <a
-            href="http://en.ikef.or.kr/" target="_blank">Kwanjeong Educational Foundation</a> and <a
-            href="http://www.siebelscholars.com/scholars/NamWookKim" target="_blank">Siebel Scholars Foundation</a>.
-          Prior to Harvard, he was a research associate at KAIST and worked at Samsung and LG as a research engineer. He
-          also received M.S. in Computer Science from Stanford University and B.S. in Mathematics and Computer Science
-          from Stony Brook University, and B.S. in Digital Media from Ajou University (Dual-Degree).
-
-          <!-- and Ajou Universities as part of a dual-degree program. -->
-        </p>
-        <p>
-          I am hiring <a
-            href="https://docs.google.com/document/d/1kJomOo-Dg-U3mxw3PRRqS3wtl4cEEVj-mgdhSdndKbw/edit?usp=sharing"
-            target="_blank"><strong>postdoctoral fellows</strong></a> and <a
-            href="https://docs.google.com/document/d/17vVKjHjPu4F7R9dDap9XFPq6KVx6QMKTXjMBeQDiplE/edit?usp=sharing"
-            target="_blank"><strong>research associates</strong></a>. If you are interested in <a
-            href="https://www.bc.edu/content/bc-web/offices/office-of-international-students-and-scholars/immigration/scholars.html"
-            target="_blank">visiting scholars</a> or undergraduates at BC interested in research, please reach out to me
-          at any time.
-        </p>
-        <p>
-          <strong>Office hours</strong>: Please reserve a <a href="https://calendar.app.google/v8nNaUjzTEAiULY57"
-            target="_blank">15 min slot here</a>.
         </p>
 
 
@@ -179,7 +169,7 @@
     </div>
     <div class="column">
       <section>
-        <h2 class="title">Advisees</h2>
+        <h2 class="title">People</h2>
         <div class="people" role="list">
 
         </div>
@@ -190,64 +180,59 @@
         </section>
 
       </section>
-      <section>
-        <h2 class="title">Travels</h2>
-        <div class="search">
-          <!-- <label for="search-news" class="visuallyhidden">Search Travels</label> -->
-          <input type="text" name='travel' placeholder="Search Travels..." aria-label="search travels">
-        </div>
-        <div class="travels" role="list">
 
-        </div>
-      </section>
       <section>
-        <h2 class="title">Teaching</h2>
+        <h2 class="title">Courses</h2>
         <div class="courses" role="list">
 
         </div>
       </section>
       <section>
         <h2 class="title">Contact</h2>
-        <div class="profile-item email">
+        <div class="contact-item email">
           nam.wook.kim@bc.edu
         </div>
-        <div class="profile-item">
+        <div class="contact-item">
           245 Beacon Street, Room 428B, Chestnut Hill, MA 02467
         </div>
-        <div class="profile-item">
+        <!-- <div class="profile-item">
           <a href="https://twitter.com/namwkim85" target="_blank"><i class="fab fa-twitter" aria-hidden="true"></i>
             <span class="visuallyhidden">Twitter</span>
           </a>
           <span class="dv">|</span>
-<!--           <a href="https://www.instagram.com/namwkim/" target="_blank"><i class="fab fa-instagram-square"
+          <a href="https://www.instagram.com/namwkim/" target="_blank"><i class="fab fa-instagram-square"
               aria-hidden="true"></i>
             <span class="visuallyhidden">Instagram</span>
           </a>
-          <span class="dv">|</span> -->
+          <span class="dv">|</span>
           <a href="https://www.linkedin.com/in/namwkim" target="_blank"><i class="fab fa-linkedin"
-            aria-hidden="true"></i>
+              aria-hidden="true"></i>
             <span class="visuallyhidden">LinkedIn</span>
           </a>
           <span class="dv">|</span>
           <a href="https://github.com/namwkim" target="_blank"><i class="fab fa-github" aria-hidden="true"></i>
             <span class="visuallyhidden">Github</span></a>
-        </div>
+        </div> -->
         <br>
-        <div class="google-maps-container centered" aria-label="Google Map showing 245 Beacon St, Chestnut Hill, MA 02467">
+        <div class="google-maps-container centered"
+          aria-label="Google Map showing 245 Beacon St, Chestnut Hill, MA 02467">
           <div class="google-maps" aria-hidden="true">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2949.373839650685!2d-71.1688963!3d42.33455239999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e379b294e1d789%3A0xc9b197dcd51ebc4a!2s245%20Beacon%20St%2C%20Chestnut%20Hill%2C%20MA%2002467!5e0!3m2!1sen!2sus!4v1663857321729!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2949.373839650685!2d-71.1688963!3d42.33455239999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e379b294e1d789%3A0xc9b197dcd51ebc4a!2s245%20Beacon%20St%2C%20Chestnut%20Hill%2C%20MA%2002467!5e0!3m2!1sen!2sus!4v1663857321729!5m2!1sen!2sus"
+              width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
-        <br>
-        <div class="twiter-container centered">
+        <!-- <br> -->
+        <!-- <div class="twiter-container centered">
           <a class="twitter-timeline" data-height="750" href="https://twitter.com/namwkim85">Tweets by namwkim85</a>
           <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
+        </div> -->
       </section>
     </div>
   </main>
   <footer>
-    Copyright © <span id="copyright-year"></span> Nam Wook Kim.
+    Copyright © <span id="copyright-year"></span> Data Within Reach Lab
     <!-- The website code is <a href="https://github.com/namwkim/namwkim.github.io" target="_blank">here</a>.  -->
     <!-- 3D models in the background by 
     <a href="https://poly.google.com/user/b7jif2AAit5" target="_blank">Alex “SAFFY” Safayan</a> and
