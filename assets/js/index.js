@@ -1,40 +1,14 @@
-// let Remarkable = require('remarkable');
-let md = new Remarkable();
-let formatTime = d3.timeFormat("%b %d, %Y");
-let parseTime = d3.timeParse('%Y-%m-%d');
-let allPubs, allNews, allTravels;
-let maxNews = 5;
-let maxTravels = 5;
-let maxCourses = 5;
+
+let allPubs, allNews;
+
 let dataCond = null;
-function strip(str) {
-    return str.replace(/^\s+|\s+$/g, '');
-}
 
-function formatDate(date){
-    console.log(date);
-    let temp = strip(date);
-    if (temp=='TBD'){
-        return temp;
-    }else{
-        return formatTime(parseTime(temp));
-    }
-}
+let newsContainer = document.querySelector('.news');
+let courseContainer = document.querySelector('.courses');
+let peopleContainer = document.querySelector('.people');
+let md = new Remarkable();
 
-function getURL(path){
-    if (path.startsWith("http") && path.includes("drive.google.com")){
-        const url = new URL(path); 
-        const urlParams = new URLSearchParams(url.search);
-        if (urlParams.get("id")){
-            return `https://drive.google.com/uc?export=view&id=${urlParams.get("id")}`;
-        }else{
-            const id = path.split('/').slice(-2)[0];// second from last
-            return `https://drive.google.com/uc?export=view&id=${id}`;
-        }
-    }else{
-        return path;
-    }
-}
+import {formatDate, getURL, renderNews, renderCourses, writeAddress} from './common.js';
 
 Promise.all([
     'https://docs.google.com/spreadsheets/d/e/2PACX-1vRiEYYD3rIzHcyFpugw6fF8EbO2EVjClWyoHf49rU7nJCVa-YjXJ6vJ4VMwgRIFyaVHSgfBswDhU5-B/pub?output=csv',
@@ -46,100 +20,24 @@ Promise.all([
         res.ok ? res.text() : Promise.reject(res.status))
         .then(text=>d3.csvParse(text, d=>{
             const record = {...d};
-            console.log("Record", record);
+            // console.log("Record", record);
             for (const prop in record){
                 record[prop] = record[prop]==="" || record[prop]==="na"? null: record[prop];
             }
             return record;
         }))
 })).then(value=>{
-    renderNews(allNews = value[0]);
+    renderNews(allNews = value[0], newsContainer);
     allPubs = value[1];
-    console.log("allPubs", allPubs);
+    // console.log("allPubs", allPubs);
     let filter = document.querySelector('.chip.selected');
     dataCond = filter.dataset.cond;
     renderPubs(allPubs, dataCond);
-    renderCourses(value[2]);
-    console.log('people', value[3]);
-    renderPeople(value[3]);
+    renderCourses(value[2], courseContainer);
+    // console.log('people', value[4]);
+    renderPeople(value[3], peopleContainer);
 });
 
-function renderPeople(people){
-    // people = people.filter(d=>d["Position"]!=="Principle Investigator");
-
-    console.log('render people', people);
-
-
-    let container = document.querySelector('.people');
-    const positions = ["Postdoctoral Fellow", "Research Associate", "Undergraduate Assistant"];
-    container.innerHTML='';
-    people.sort((a,b)=>{
-        if (positions.indexOf(a["Position"])>positions.indexOf(b["Position"])){
-            return 1;
-        }
-        if (positions.indexOf(a["Position"])<positions.indexOf(b["Position"])){
-            return -1
-        }
-        return 0;
-    });
-
-        
-    people.filter(d=>d["Status"]==="Present").forEach(item=>{
-        let elem = document.createElement('div');
-        elem.setAttribute('role', 'listitem');
-        console.log("item", item)
-        elem.innerHTML=`
-        <a target="_blank"href="${item["Website"]?item["Website"]:item["LinkedIn"]}">
-            <img src="${!item["Photo"]?'assets/images/person.png':getURL(item["Photo"])}" alt="${item["Name"]}, ${item["Position"]}"/>
-            <div class="person-detail" style="display:none">${item["Name"]}<br>${item["Position"]}</div>
-        </a>
-        `
-        
-        container.appendChild(elem);
-        elem.classList.add('item');
-        elem.addEventListener("mouseenter", showPersonDetail);
-        elem.addEventListener("mouseleave", hidePersonDetail);
-    })
-
-    container = document.querySelector('.alumni');
-    container.innerHTML='';
-    people.filter(d=>d["Status"]==="Alumni").forEach(item=>{
-        let elem = document.createElement('div');
-        elem.setAttribute('role', 'listitem');
-        elem.innerHTML=`
-        <a target="_blank"href="${item["Website"]?item["Website"]:item["LinkedIn"]}">
-            <img src="${!item["Photo"]?'assets/images/person.png':getURL(item["Photo"])}" alt="${item["Name"]}, ${item["Position"]}"/>
-            <div class="person-detail" style="display:none">${item["Name"]}<br>${item["Position"]}</div>
-        </a>
-        `
-        
-        container.appendChild(elem);
-        elem.classList.add('item');
-        elem.addEventListener("mouseenter", showPersonDetail);
-        elem.addEventListener("mouseleave", hidePersonDetail);
-    })
-}
-
-function showPersonDetail(event){
-    // event.target.style.zIndex = 1;
-    // const img = event.target.querySelector('img');
-    // img.style.width = "64px";
-    // img.style.height = "64px";
-    // img.classList.add('selected');
-
-    const detail = event.target.querySelector('.person-detail');
-    detail.style.display = "block";
-}
-function hidePersonDetail(event){
-    // event.target.style.zIndex = 0;
-    // const img = event.target.querySelector('img');
-    // img.style.width = "32px";
-    // img.style.height = "32px";
-    // img.classList.remove('selected');
-
-    const detail = event.target.querySelector('.person-detail');
-    detail.style.display = "none";
-}
 
 function renderPubs(pubs, cond){
     let filtered;
@@ -325,55 +223,6 @@ document.querySelector('#by-time').addEventListener('change', function(){
 });
 
 
-
-function renderNews(news){
-    console.log('render news', news);
-    let container = document.querySelector('.news');
-    container.innerHTML='';
-    const filtered = news.slice(0,maxNews);
-    filtered.sort((a,b)=> parseTime(b.date) - parseTime(a.date));
-    filtered.forEach(item=>{
-        let elem = document.createElement('div');
-        elem.setAttribute('role', 'listitem')
-        elem.innerHTML = `
-                ${md.render(item.headline)}
-                 <span class='date'>${formatDate(item.date)}</span>
-            `;
-        
-        container.appendChild(elem);
-        elem.classList.add('item');
-    })
-}
-
-function renderCourses(courses){
-    console.log('render courses', courses);
-    let container = document.querySelector('.courses');
-    const filtered = courses.slice(0,maxCourses);
-    filtered.sort((a,b)=> `${b.when}, ${b.year}` - `${a.when}, ${a.year}`);
-    filtered.forEach(item=>{
-        let elem = document.createElement('div');
-        elem.setAttribute('role', 'listitem')
-        elem.innerHTML = `
-                ${md.render(item.name)}
-                 <span class='date'>${item.when}, ${item.year}</span>
-                 <span class='location'>@ ${item.where}</span>
-            `;
-        
-        container.appendChild(elem);
-        elem.classList.add('item');
-    })
-}
-function writeAddress(item){
-    if (item.country=='USA'){
-        return item.city + ', ' +  item.state;
-    }
-    if (item.city){
-        return item.city + ', ' + item.country
-    }
-    return item.country
-    
-}
-
 document.querySelector('.email').addEventListener('click', event=>{
     let email = event.currentTarget.innerHTML.replace(/\s/g, '').replace('at', '@');
     var copyText = document.createElement("input");
@@ -413,12 +262,11 @@ newsSearch.addEventListener('input', function(event){
             console.log(text.toLowerCase(),this.value.toLowerCase());
             return text.toLowerCase().includes(this.value.toLowerCase());
         })
-        renderNews(filtered);
+        renderNews(filtered, newsContainer);
     }else{
-        renderNews(allNews);
+        renderNews(allNews, newsContainer);
     }
 });
-
 
 
 let pubSearch = document.querySelector('.search input[name="publication"');
@@ -451,31 +299,120 @@ pubSearch.addEventListener('input', function(event){
     
 // });
 
-// window.onload = function() {
-// 	var see = document.getElementById('see-old-news');
-//
-//   see.addEventListener('click', function() {
-//     var elem = document.getElementById('news-archive');
-//
-//   	if (elem.style.display === 'none') {
-//   		elem.style.display = 'block';
-//       see.innerHTML = 'Hide old news';
-//   	} else {
-//   		elem.style.display = 'none';
-//       see.innerHTML = 'See old news';
-//   	}
-// 	});
-//
-// }
-// let openNewsArchive = document.querySelector('.open_news_archive');
 
-// openNewsArchive.addEventListener('click', function(){
-    
-//     let newsArchive = document.querySelector('.news_archive');
-//     console.log(newsArchive.style.display);
-//     if (newsArchive.style.display === "block") {
-//         newsArchive.style.display = "none";
-//     } else {
-//         newsArchive.style.display = "block";
-//     }
-// });
+function renderPeople(people, container, maxPeople = 20) {
+    // people = people.filter((d) => d["Position"] !== "Principal Investigator");
+
+    // console.log('render people', people);
+
+    const positions = [
+        "Principal Investigator",
+        "Postdoctoral Fellow",
+        "Research Associate",
+        "Undergraduate Assistant",
+    ];
+    container.classList.add("people");
+    container.innerHTML = "";
+    people.sort((a, b) => {
+        if (
+            positions.indexOf(a["Position"]) > positions.indexOf(b["Position"])
+        ) {
+            return 1;
+        }
+        if (
+            positions.indexOf(a["Position"]) < positions.indexOf(b["Position"])
+        ) {
+            return -1;
+        }
+        return 0;
+    });
+
+    people
+        .filter((d) => d["Status"] === "Present")
+        .slice(0, maxPeople)
+        .forEach((item) => {
+            let elem = document.createElement("div");
+            elem.setAttribute("role", "listitem");
+            console.log("item", item);
+            elem.innerHTML = `
+        <a target="_blank"href="${
+            item["Website"] ? item["Website"] : item["LinkedIn"]
+        }">
+            <img src="${
+                !item["Photo"]
+                    ? "assets/images/person.png"
+                    : getURL(item["Photo"])
+            }" alt="${item["Name"]}, ${item["Position"]}"/>
+            <div class="person-detail" style="display:none">${
+                item["Name"]
+            }<br>${item["Position"]}</div>
+        </a>
+        `;
+
+            container.appendChild(elem);
+            elem.classList.add("item");
+            elem.addEventListener("mouseenter", showPersonDetail);
+            elem.addEventListener("mouseleave", hidePersonDetail);
+        });
+
+    const alumni = document.createElement("section");
+    alumni.innerHTML = `
+        <h4>Alumni</h4>
+        <div class="alumni" role="list"></div>
+    `;
+
+    container.parentNode.insertBefore(alumni, container.nextSibling);
+    // container.parentNode.appendChild(alumni);
+    container.classList.add("alumni");
+
+    container = alumni.querySelector(".alumni");
+    container.innerHTML = "";
+    people
+        .filter((d) => d["Status"] === "Alumni")
+        .slice(0, maxPeople)
+        .forEach((item) => {
+            let elem = document.createElement("div");
+            elem.setAttribute("role", "listitem");
+            elem.innerHTML = `
+        <a target="_blank"href="${
+            item["Website"] ? item["Website"] : item["LinkedIn"]
+        }">
+            <img src="${
+                !item["Photo"]
+                    ? "assets/images/person.png"
+                    : getURL(item["Photo"])
+            }" alt="${item["Name"]}, ${item["Position"]}"/>
+            <div class="person-detail" style="display:none">${
+                item["Name"]
+            }<br>${item["Position"]}</div>
+        </a>
+        `;
+
+            container.appendChild(elem);
+            elem.classList.add("item");
+            elem.addEventListener("mouseenter", showPersonDetail);
+            elem.addEventListener("mouseleave", hidePersonDetail);
+        });
+}
+
+function showPersonDetail(event) {
+    // event.target.style.zIndex = 1;
+    // const img = event.target.querySelector('img');
+    // img.style.width = "64px";
+    // img.style.height = "64px";
+    // img.classList.add('selected');
+
+    const detail = event.target.querySelector(".person-detail");
+    detail.style.display = "block";
+}
+function hidePersonDetail(event) {
+    // event.target.style.zIndex = 0;
+    // const img = event.target.querySelector('img');
+    // img.style.width = "32px";
+    // img.style.height = "32px";
+    // img.classList.remove('selected');
+
+    const detail = event.target.querySelector(".person-detail");
+    detail.style.display = "none";
+}
+
