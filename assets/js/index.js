@@ -150,7 +150,7 @@ function renderPubs(pubs, cond){
                 </div>
                 <div class='pub-detail'>
                     <div class='pub-title'><strong>${d.title}</strong></div>
-                    <div class='pub-authors'>${d.authors.replace('Nam Wook Kim', '<strong>Nam Wook Kim</strong>')}</div>
+                    <div class='pub-authors'>${d.authors}</div>
                     <div class='pub-venue'><em>${d.venue} ${d.venue_abbreviation?`(<strong>${d.venue_abbreviation}</strong>)`:''}, ${d.year}</em></div>
                     <div class='pub-award'><strong>${d.award?d.award:""}</strong></div>
                     <div class='pub-materials' role="list" aria-label="Publication Materials">
