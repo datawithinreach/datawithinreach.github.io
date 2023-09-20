@@ -239,6 +239,13 @@ header .column:nth-child(2){
     object-fit: cover;
     border:2px solid white;
     transition: all .25s;
+
+    display: inline-block;
+    font-family: Arial;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
   }
   .alumni .item img{
     position: relative;
@@ -248,6 +255,13 @@ header .column:nth-child(2){
     object-fit: cover;
     border:2px solid white;
     transition: all .25s;
+
+    display: inline-block;
+    font-family: Arial;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
   }
   .alumni .item img:hover, .people .item img:hover{
     border:2px solid #dccaa0;
